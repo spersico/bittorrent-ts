@@ -1,7 +1,7 @@
 // Examples:
 // - decodeBencode("5:hello") -> "hello"
 // - decodeBencode("10:hello12345") -> "hello12345"
-function decodeBencode(bencodedValue: string): string {
+function decodeBencode(bencodedValue: string): string | number {
   /* This function is used to decode a bencoded string
     The bencoded string is a string that is prefixed by the length of the string
     **/
@@ -17,7 +17,7 @@ function decodeBencode(bencodedValue: string): string {
     bencodedValue[0] === 'i' &&
     bencodedValue[bencodedValue.length - 1] === 'e'
   ) {
-    return bencodedValue.substring(1, bencodedValue.length - 1);
+    return Number(bencodedValue.substring(1, bencodedValue.length - 1));
   } else {
     throw new Error('Only strings are supported at the moment');
   }
