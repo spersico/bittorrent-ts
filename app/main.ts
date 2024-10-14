@@ -13,6 +13,11 @@ function decodeBencode(bencodedValue: string): string {
       throw new Error('Invalid encoded value');
     }
     return bencodedValue.substring(firstColonIndex + 1);
+  } else if (
+    bencodedValue[0] === 'i' &&
+    bencodedValue[bencodedValue.length - 1] === 'e'
+  ) {
+    return bencodedValue.substring(1, bencodedValue.length - 1);
   } else {
     throw new Error('Only strings are supported at the moment');
   }
