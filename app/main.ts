@@ -8,7 +8,7 @@ function decodeBencode(bencodedValue: string): {
   lastIndexUsed: number;
 } {
   const analyzer =
-    /(^(?<string_length>\d+):(?<string_text>.+))|(^i(?<integer_content>-?\d+)e$)|(^l(?<array_content>.*)e$)/;
+    /(^(?<string_length>\d+):(?<string_text>.+))|(^i(?<integer_content>-?\d+)e)|(^l(?<array_content>.*)e$)/;
 
   const matches = bencodedValue.match(analyzer);
 
@@ -27,7 +27,7 @@ function decodeBencode(bencodedValue: string): {
       decodedList.push(decodedValue.value);
       lastIndexUsed += decodedValue.lastIndexUsed;
     }
-    return { value: decodedList, lastIndexUsed };
+    return { value: decodedList, lastIndexUsed: lastIndexUsed + 2 };
   } else if (typeof integer_content === 'string') {
     return {
       value: parseInt(integer_content),
