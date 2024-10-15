@@ -119,7 +119,7 @@ const bencodedValue = args[3];
 if (args[2] === 'decode') {
   try {
     const decoded = decodeBencode(bencodedValue);
-    console.log('FINAL', JSON.stringify(decoded.value));
+    console.log(JSON.stringify(decoded.value));
   } catch (error) {
     console.error(error.message);
   }
