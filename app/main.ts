@@ -11,7 +11,6 @@ function decodeBencode(bencodedValue: string): {
     /(^(?<string_length>\d+):(?<string_text>.+))|(^i(?<integer_content>-?\d+)e$)|(^l(?<array_content>.*)e$)/;
 
   const matches = bencodedValue.match(analyzer);
-  console.log('decodeBencode =>', bencodedValue, '=> ', matches?.groups);
 
   if (!matches || !matches.groups) throw new Error('Invalid encoded value');
 
