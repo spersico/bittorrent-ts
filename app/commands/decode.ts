@@ -1,31 +1,31 @@
-type BencodePrimitive = number | string;
-type BencodeList = Array<number | string | BencodeList | BencodeDict>;
+export type BencodePrimitive = number | string;
+export type BencodeList = Array<BencodePrimitive | BencodeList | BencodeDict>;
 export interface BencodeDict {
   [key: BencodePrimitive]: BencodePrimitive | BencodeList | BencodeDict;
 }
 
 export type BencodeValue = BencodePrimitive | BencodeList | BencodeDict;
 
-type BencodeResult<T = BencodeValue> = {
+export type BencodeResult<T = BencodeValue> = {
   value: T;
   lastIndexUsed: number;
 };
 
 // Examples:
-// - decodeBencode("5:hello") -> "hello"
 // - decodeBencode("10:hello12345") -> "hello12345"
 // - decodeBencode("i123e") -> 123
 // - decodeBencode("l5:helloi52ee") -> -[“hello”,52]
 // - decodeBencode("d10:inner_dictd4:key16:value14:key2i42e8:list_keyl5:item15:item2i3eeee") -> -{"inner_dict":{"key1":"value1","key2":42,"list_key":["item1","item2",3]}}
-export function decodeBencode<T = BencodeDict>(
+export function decodeBencode(
   bencodedValue: string
-): BencodeResult<T> {
+): BencodeResult<BencodeValue> {
   const analyzer =
     /(?:^(?<string_length>\d+):(?<string_text>.+))|(?:^i(?<integer_content>-?\d+)e)|(?:^l(?<array_content>.*)e)|(?:^d(?<dictionary_content>.*)e)/;
 
   const matches = bencodedValue.match(analyzer);
 
-  if (!matches || !matches.groups) throw new Error('Invalid encoded value');
+  if (!matches || !matches.groups)
+    throw new Error('Invalid encoded value - No Matches:' + bencodedValue);
 
   const {
     string_length,
@@ -44,7 +44,7 @@ export function decodeBencode<T = BencodeDict>(
   } else if (typeof dictionary_content === 'string') {
     return ParserStrategies.Dictionary.decoder(dictionary_content);
   } else {
-    throw new Error('Invalid encoded value');
+    throw new Error('Invalid encoded value - Invalid Type: ' + bencodedValue);
   }
 }
 
@@ -137,3 +137,12 @@ const ParserStrategies = {
     },
   },
 };
+
+export function decodeAndLog(bencodedValue: string) {
+  try {
+    const decoded = decodeBencode(bencodedValue);
+    console.log(JSON.stringify(decoded.value));
+  } catch (error: unknown) {
+    if (error instanceof Error) console.error(error?.message);
+  }
+}
