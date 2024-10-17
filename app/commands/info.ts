@@ -37,7 +37,7 @@ export async function torrentInfo(filename: string) {
     console.log(`Length: ${metadata.info.length}`);
     console.log(`Info Hash: ${hash}`);
     console.log(
-      'Piece Hashes:\n',
+      'Piece Hashes:',
       piecesHexa
         .match(/.{1,40}/g)
         ?.map((piece: string) => piece)
