@@ -6,7 +6,8 @@
     "dev": "bun run app/main.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "@types/bencode": "latest"
   },
   "dependencies": {
     "bencode": "^4.0.0"
