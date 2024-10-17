@@ -31,10 +31,18 @@ export async function torrentInfo(filename: string) {
     const announce = new TextDecoder().decode(metadata['announce']);
     const hash = getInfoHash(metadata.info);
 
+    const piecesHexa = Buffer.from(metadata.info.pieces).toString('hex');
+
     console.log(`Tracker URL: ${announce}`);
     console.log(`Length: ${metadata.info.length}`);
     console.log(`Info Hash: ${hash}`);
-
+    console.log(
+      'Piece Hashes:\n',
+      piecesHexa
+        .match(/.{1,40}/g)
+        ?.map((piece: string) => piece)
+        .join('\n')
+    );
     return { metadata, hash };
   } catch (error: unknown) {
     if (error instanceof Error) console.error(error?.message);
