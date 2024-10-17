@@ -1,9 +1,16 @@
 import { promises as fs } from 'fs';
-import { decodeBencode, type BencodeDict, type BencodeResult } from './decode';
+import bencode from 'bencode';
 
-async function readFileContent(filename: string): Promise<string> {
+async function readFileContent(filename: string): Promise<Buffer> {
   try {
-    return await fs.readFile(filename, 'utf-8');
+    // Read the file as a Buffer
+    const buffer = await fs.readFile(filename);
+
+    // You can try different encodings based on the file content:
+    // UTF-8 if the file mostly contains text and valid characters
+    // Latin1 (ISO-8859-1) to preserve the byte values for non-UTF-8 characters
+
+    return buffer;
   } catch (error) {
     if (error instanceof Error)
       console.error(`Error reading the file: ${error?.message}`);
@@ -16,13 +23,13 @@ export async function torrentInfo(filename: string) {
     const fileContents = await readFileContent(filename);
     if (!fileContents) throw new Error('Empty torrent file');
 
-    const decoded = decodeBencode(fileContents) as BencodeResult<BencodeDict>;
-    if (!decoded?.value?.info || !decoded?.value?.announce)
+    const decoded = bencode.decode(fileContents);
+    if (!decoded?.info || !decoded?.announce)
       throw new Error('Error decoding the torrent file');
-
-    console.log(`Tracker URL: ${decoded.value['announce']}`);
-    console.log(`Length: ${(decoded.value.info as BencodeDict).length}`);
-    return decoded.value;
+    const announce = new TextDecoder().decode(decoded['announce']);
+    console.log(`Tracker URL: ${announce}`);
+    console.log(`Length: ${decoded.info.length}`);
+    return decoded;
   } catch (error: unknown) {
     if (error instanceof Error) console.error(error?.message);
     throw error;
