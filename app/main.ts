@@ -154,7 +154,7 @@ function sortAndBuildDictionary(dictionary: any[]): any {
   const sortedDictionary = Object.entries(unsortedResults)
     .sort((a, b) => a[0].localeCompare(b[0]))
     .reduce((acc, keyValuePair) => {
-      console.log(`🐛 | .reduce | keyValuePair:`, keyValuePair);
+      //   console.log(`🐛 | .reduce | keyValuePair:`, keyValuePair);
       acc[keyValuePair[0]] = keyValuePair[1];
       return acc;
     }, {} as Record<string, any>);
