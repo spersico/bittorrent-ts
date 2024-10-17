@@ -36,6 +36,7 @@ export async function torrentInfo(filename: string) {
     console.log(`Tracker URL: ${announce}`);
     console.log(`Length: ${metadata.info.length}`);
     console.log(`Info Hash: ${hash}`);
+    console.log(`Piece Length: ${metadata.info.length}`);
     console.log(
       'Piece Hashes:',
       piecesHexa
