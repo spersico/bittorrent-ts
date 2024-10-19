@@ -3,7 +3,7 @@ import bencode from 'bencode';
 
 const MY_NAME_IS = '12345678901230303456';
 
-function parsePeers(peers: Uint8Array): { ip: string; port: string }[] {
+function parsePeers(peers: Uint8Array): { ip: string; port: number }[] {
   const groupPeers = peers.reduce((acc, _, index) => {
     if (index % 6 === 0) {
       acc.push(peers.slice(index, index + 6));
@@ -11,7 +11,7 @@ function parsePeers(peers: Uint8Array): { ip: string; port: string }[] {
     return acc;
   }, [] as Uint8Array[]);
 
-  const PeersParsed = groupPeers.map((bytes, index) => {
+  const PeersParsed = groupPeers.map((bytes) => {
     const ip = Array.from(bytes.slice(0, 4)).join('.');
     const portPart = bytes.slice(4, 6);
     const port = Number.parseInt(Buffer.from(portPart).toString('hex'), 16);
@@ -44,28 +44,15 @@ export async function torrentPeers(filename: string) {
       incomplete: parsedResponse.incomplete,
       interval: parsedResponse.interval,
       minInterval: parsedResponse['min interval'],
-      peers: parsedResponse.peers as Uint8Array,
+      peers: parsePeers(parsedResponse.peers),
+      peersRaw: parsedResponse.peers,
     };
 
-    // group peers by 6 bytes
-    const groupPeers = metrics.peers.reduce((acc, _, index) => {
-      if (index % 6 === 0) {
-        acc.push(metrics.peers.slice(index, index + 6));
-      }
-      return acc;
-    }, [] as Uint8Array[]);
-
-    const PeersParsed = groupPeers.map((bytes, index) => {
-      const ip = Array.from(bytes.slice(0, 4)).join('.');
-      const portPart = bytes.slice(4, 6);
-      const port = Number.parseInt(Buffer.from(portPart).toString('hex'), 16);
-      return { ip, port };
-    });
     console.log(
-      PeersParsed.map((peer) => `${peer.ip}:${peer.port}`).join('\n')
+      metrics.peers.map((peer) => `${peer.ip}:${peer.port}`).join('\n')
     );
 
-    return { info };
+    return { info, metrics };
   } catch (error: unknown) {
     if (error instanceof Error) console.error(error?.message);
     throw error;
