@@ -19,6 +19,8 @@ export type BencodeResult<T = BencodeValue> = {
 export function decodeBencode(
   bencodedValue: string
 ): BencodeResult<BencodeValue> {
+  if (!bencodedValue)
+    throw new Error(`Invalid encoded value - Empty value: ${bencodedValue}`);
   const analyzer =
     /(?:^(?<string_length>\d+):(?<string_text>.+))|(?:^i(?<integer_content>-?\d+)e)|(?:^l(?<array_content>.*)e)|(?:^d(?<dictionary_content>.*)e)/;
 
