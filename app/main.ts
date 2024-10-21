@@ -1,4 +1,5 @@
 import { decodeAndLog } from './commands/decode';
+import { torrentHandshake } from './commands/handshake';
 import { torrentInfo } from './commands/info';
 import { torrentPeers } from './commands/peers';
 
@@ -10,17 +11,16 @@ async function executeCommand(args: string[]) {
   }
   switch (true) {
     case args[2] === 'decode':
-      decodeAndLog(args[3]);
-      break;
+      return decodeAndLog(args[3]);
     case args[2] === 'info':
-      torrentInfo(args[3]);
-      break;
+      return torrentInfo(args[3]);
     case args[2] === 'peers':
-      torrentPeers(args[3]);
-      break;
+      return torrentPeers(args[3]);
+    case args[2] === 'handshake':
+      return torrentHandshake(args[3], args[4]);
     default:
       console.error('Invalid command - Valid commands are "decode" and "info"');
-      break;
+      return 1;
   }
 }
 

@@ -1,7 +1,6 @@
+import { PEER_ID } from '../env';
 import { torrentInfo } from './info';
 import bencode from 'bencode';
-
-const MY_NAME_IS = '12345678901230303456';
 
 function parsePeers(peers: Uint8Array): { ip: string; port: number }[] {
   const groupPeers = peers.reduce((acc, _, index) => {
@@ -29,7 +28,7 @@ export async function torrentPeers(filename: string) {
       '?info_hash=' +
       info.infoHash.infoHash +
       '&peer_id=' +
-      encodeURIComponent(MY_NAME_IS) +
+      encodeURIComponent(PEER_ID) +
       '&port=6881&uploaded=0&downloaded=0&left=' +
       info.metadata.info.length.toString() +
       '&compact=1';
