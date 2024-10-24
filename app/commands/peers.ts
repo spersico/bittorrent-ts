@@ -20,7 +20,10 @@ function parsePeers(peers: Uint8Array): { ip: string; port: number }[] {
   return PeersParsed;
 }
 
-export async function torrentPeers(filename: string) {
+export async function torrentPeers(
+  filename: string,
+  { silent }: { silent: boolean } = { silent: false }
+) {
   try {
     const info = await torrentInfo(filename, { silent: true });
     const url =
@@ -46,10 +49,10 @@ export async function torrentPeers(filename: string) {
       peers: parsePeers(parsedResponse.peers),
       peersRaw: parsedResponse.peers,
     };
-
-    console.log(
-      metrics.peers.map((peer) => `${peer.ip}:${peer.port}`).join('\n')
-    );
+    if (!silent)
+      console.log(
+        metrics.peers.map((peer) => `${peer.ip}:${peer.port}`).join('\n')
+      );
 
     return { info, metrics };
   } catch (error: unknown) {

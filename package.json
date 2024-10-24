@@ -10,6 +10,8 @@
     "@types/bencode": "latest"
   },
   "dependencies": {
-    "bencode": "^4.0.0"
+    "@types/bittorrent-protocol": "^3.1.6",
+    "bencode": "^4.0.0",
+    "bittorrent-protocol": "^4.1.15"
   }
 }
