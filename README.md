@@ -3,17 +3,14 @@
 This is an in-progress TypeScript solution to the
 ["Build Your Own BitTorrent" Challenge](https://app.codecrafters.io/courses/bittorrent/overview).
 
-In this challenge, I intend to build a BitTorrent client that's capable of parsing a
-.torrent file and downloading a file from a peer. Along the way, I'll learn
-about how torrent files are structured, HTTP trackers, BitTorrent’s Peer
-Protocol, pipelining and more.
+In this challenge, I intended to build a BitTorrent client that's capable of parsing a
+.torrent file and downloading a file from a peer. 
 
-# Running and Pushing changes
+# Running and Pushing Changes
 
-Note: This section is for stages 2 and beyond.
-
-1. Ensure you have `bun (1.1)` installed locally
-1. Run `./your_bittorrent.sh` to run your program, which is implemented in
+1. Ensure you have `bun` installed locally
+2. Run `./your_bittorrent.sh` to run your program, which is implemented in
    `app/main.ts`.
-1. Commit your changes and run `git push origin master` to submit your solution
-   to CodeCrafters. Test output will be streamed to your terminal.
+3. Commit your changes and run `git push origin master` to submit your solution
+   to CodeCrafters (or `git push public master` to publish to Github). Test output will be streamed to your terminal.
+
